@@ -21,7 +21,8 @@ var o = {
    // icon: document.getElementById("img").getAttribute("src")
 };
 var turnCount = 0;
-var currentPlayer = "";
+var currentPlayer;
+var gameStateMessage;
 
 //Prompts user in window for a name
 function getPlayerName(mode) {
@@ -44,25 +45,37 @@ function createPlayers() {
    getPlayerName("2P");
 }
 
-function incrementTurn() {
-   turnCount++;
-   if (turnCount % 2 == 0) {
+function incrementPlayer() {
+   if (currentPlayer == x.playerName) {
       currentPlayer = o.playerName;
-      return currentPlayer;
+   } else {
+      currentPlayer = x.playerName;
    }
-   currentPlayer = x.playerName;
-   return currentPlayer;
+}
+
+function getGameState() {
+   gameStateMessage = "Turn " + turnCount + ": " + currentPlayer + "'s Turn";
+}
+
+function playGame(rounds) {
+   var limit = 0;
+   while (limit < rounds) {
+      turnCount++;
+      incrementPlayer();
+      getGameState();
+      window.alert(gameStateMessage);
+      incrementPlayer();
+      getGameState();
+      window.alert(gameStateMessage);
+
+      limit++;
+   }
 }
 
 function updateBoard() {
    //main board update function. should use several helper functions to grab info
    createPlayers();
-   for (var turn = 0; turn < 5; turn++) {
-      incrementTurn();
-      window.alert(currentPlayer);
-      incrementTurn();
-      window.alert(currentPlayer);
-   }
+   playGame(5);
 }
 
 function createEventListeners() {
