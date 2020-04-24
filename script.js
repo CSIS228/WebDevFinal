@@ -11,14 +11,12 @@
 var x = {
    player: 1,
    playerName: "",
-   //HTML doesn't have an image object yet, will implement this later
-   // icon: document.getElementById("img").getAttribute("src")
+   icon: "x.png"
 };
 var o = {
    player: 2,
    playerName: "",
-   //HTML doesn't have an image object yet, will implement this later
-   // icon: document.getElementById("img").getAttribute("src")
+   icon: "o.png"
 };
 var turnCount = 0;
 var currentPlayer;
@@ -72,10 +70,24 @@ function playGame(rounds) {
    }
 }
 
+function addImage(box, player) {
+   box = String(box);
+   var image = document.createElement("img");
+   image.src = player.icon;
+   document.getElementById(box).appendChild(image);
+}
+
 function updateBoard() {
    //main board update function. should use several helper functions to grab info
-   createPlayers();
-   playGame(5);
+   // createPlayers();
+   // playGame(5);
+   addImage(1, x);
+   addImage(2, o);
+   addImage(3, x);
+   var images = document.getElementsByTagName("img");
+   for (var count = 0; count < images.length; count++) {
+      images[count].width = "100";
+   }
 }
 
 function createEventListeners() {
