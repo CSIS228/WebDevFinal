@@ -3,10 +3,8 @@
 <head>
    <!--
       Final Project
-
       Author: Ashley D, Alex F, and Matthew K
       Date:   4-15-2020
-
       Filename: index.htm
    -->
    <meta charset="utf-8" />
@@ -14,6 +12,21 @@
    <title>Web Dev Final</title>
    <link rel="stylesheet" href="styles.css" />
    <script src="modernizr.custom.65897.js"></script>
+   <style>
+	.grid-container {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	background-color: rgba(189, 195, 199, 1);
+	padding: 10px;
+	}
+	.grid-item {
+	background-color: rgba(236, 236, 236, 1);
+	border: 1px solid rgba(108, 122, 137, 1);
+	padding: 70px;
+	font-size: 10S0px;
+	text-align: center;
+	}
+</style>
 </head>
 
 <body>
@@ -22,6 +35,22 @@
          Tic Tac Toe
       </h1>
    </header>
+  <div class="grid-container">
+  <div class="grid-item"id="1">  </div>
+  <div class="grid-item"id="2">  </div>
+  <div class="grid-item"id="3">  </div>  
+  <div class="grid-item"id="4">  </div>
+  <div class="grid-item"id="5">  </div>
+  <div class="grid-item"id="6">  </div>  
+  <div class="grid-item"id="7">  </div>
+  <div class="grid-item"id="8">  </div>
+  <div class="grid-item"id="9">  </div>  
+</div>
+  <div class="clearfix"></div>
+<footer>
+  <button>Reset</button>
+</footer>
+</div>
    <script src="script.js"></script>
 </body>
 </html>
