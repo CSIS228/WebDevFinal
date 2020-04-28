@@ -18,11 +18,13 @@ var o = {
    playerName: "",
    icon: "o.png"
 };
+
+//main global variables
 var turnCount = 0;
 var currentPlayer;
 var gameStateMessage;
 
-//Prompts user in window for a name
+//Prompts user in window for a name using switch statement
 function getPlayerName(mode) {
    switch (mode) {
       case "AI":
@@ -38,11 +40,13 @@ function getPlayerName(mode) {
    }
 }
 
+//uses event handlers to create the players
 function createPlayers() {
    //create this when method for choosing 2players or Ai is known
    getPlayerName("2P");
 }
 
+//swaps current player
 function incrementPlayer() {
    if (currentPlayer == x.playerName) {
       currentPlayer = o.playerName;
@@ -51,11 +55,14 @@ function incrementPlayer() {
    }
 }
 
+//updates game state based on win condition/turn count
 function getGameState() {
    gameStateMessage = "Turn " + turnCount + ": " + currentPlayer + "'s Turn";
 }
 
+//main game logic. creates players, increments turns, and updates game state
 function playGame(rounds) {
+   createPlayers();
    var limit = 0;
    while (limit < rounds) {
       turnCount++;
@@ -65,11 +72,11 @@ function playGame(rounds) {
       incrementPlayer();
       getGameState();
       window.alert(gameStateMessage);
-
       limit++;
    }
 }
 
+//adds image node to selected box from HTML
 function addImage(box, player) {
    box = String(box);
    var image = document.createElement("img");
@@ -77,17 +84,19 @@ function addImage(box, player) {
    document.getElementById(box).appendChild(image);
 }
 
-function updateBoard() {
-   //main board update function. should use several helper functions to grab info
-   // createPlayers();
-   // playGame(5);
-   addImage(1, x);
-   addImage(2, o);
-   addImage(3, x);
+//resizes all images on board for formatting issues
+function resizeImages() {
    var images = document.getElementsByTagName("img");
    for (var count = 0; count < images.length; count++) {
       images[count].width = "100";
    }
+}
+
+function updateBoard() {
+   //main board update function. should use several helper functions to grab info
+   playGame(5);
+
+   resizeImages();
 }
 
 function createEventListeners() {
