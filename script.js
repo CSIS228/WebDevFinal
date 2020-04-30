@@ -24,6 +24,7 @@ var turnCount = 0;
 var currentPlayer;
 var gameStateMessage;
 
+
 //Prompts user in window for a name using switch statement
 function getPlayerName(mode) {
    switch (mode) {
@@ -57,7 +58,7 @@ function incrementPlayer() {
 
 //updates game state based on win condition/turn count
 function getGameState() {
-   gameStateMessage = "Turn " + turnCount + ": " + currentPlayer + "'s Turn";
+   document.getElementById("message").innerHTML = "Turn " + turnCount + ": " + currentPlayer + "'s Turn";
 }
 
 //main game logic. creates players, increments turns, and updates game state
@@ -68,10 +69,10 @@ function playGame(rounds) {
       turnCount++;
       incrementPlayer();
       getGameState();
-      window.alert(gameStateMessage);
+      //window.alert(gameStateMessage);
       incrementPlayer();
       getGameState();
-      window.alert(gameStateMessage);
+      //window.alert(gameStateMessage);
       limit++;
    }
 }
@@ -94,13 +95,21 @@ function resizeImages() {
 
 function updateBoard() {
    //main board update function. should use several helper functions to grab info
+   createEventListeners();
    playGame(5);
 
    resizeImages();
 }
 
+// *******TEST****** //
+function test() {
+	// document.getElementById("1").innerHTML = "test";
+	console.log("test");
+}
+
 function createEventListeners() {
    //add event listeners here
+   document.getElementById("1").addEventListener("click", test());
 }
 
 //using this to test functions as they progress for now, will update
