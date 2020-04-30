@@ -21,7 +21,7 @@ var o = {
 
 //main global variables
 var turnCount = 0;
-var currentPlayer;
+var currentPlayer = x;
 var gameStateMessage;
 
 //Prompts user in window for a name using switch statement
@@ -48,32 +48,17 @@ function createPlayers() {
 
 //swaps current player
 function incrementPlayer() {
-   if (currentPlayer == x.playerName) {
-      currentPlayer = o.playerName;
+   if (currentPlayer == x) {
+      currentPlayer = o;
    } else {
-      currentPlayer = x.playerName;
+      currentPlayer = x;
    }
 }
 
 //updates game state based on win condition/turn count
 function getGameState() {
-   gameStateMessage = "Turn " + turnCount + ": " + currentPlayer + "'s Turn";
-}
-
-//main game logic. creates players, increments turns, and updates game state
-function playGame(rounds) {
-   createPlayers();
-   var limit = 0;
-   while (limit < rounds) {
-      turnCount++;
-      incrementPlayer();
-      getGameState();
-      window.alert(gameStateMessage);
-      incrementPlayer();
-      getGameState();
-      window.alert(gameStateMessage);
-      limit++;
-   }
+   gameStateMessage = "Turn " + turnCount + ": " + currentPlayer.playerName + "'s Turn";
+   document.getElementById("message").innerHTML = gameStateMessage;
 }
 
 //adds image node to selected box from HTML
@@ -85,18 +70,51 @@ function addIcon(box, player) {
    document.getElementById(box).appendChild(icon);
 }
 
-function updateBoard() {
-   //main board update function. should use several helper functions to grab info
-   // playGame(5);
-   addImage(1, x);
-   addImage(2, o);
-   addImage(3, x);
-
-   resizeImages();
+function createResultWindow(player) {
+   var resultWindow = window.open("", "ResultWindow", "width=200, height=100");
+   resultWindow.document.write("<p>" + player.playerName + " Wins</p>");
+   resultWindow.document.write("<img src='victory_crown.jpg' alt='victory'>");
 }
 
+function clickBox(box_id) {
+   var box = document.getElementById(String(box_id));
+   var gameState = document.getElementById("message");
+   try {
+      if (box.innerHTML) throw "Please click another box";
+      addIcon(box_id, currentPlayer);
+   } 
+   catch (err) {
+      gameState.innerHTML = err;
+      incrementPlayer();
+   }
+   finally {
+      incrementPlayer();
+      getGameState();
+   }
+}
+
+//main board update function. should use several helper functions to grab info
+function updateBoard() {
+   var winCondition = false;
+   createEventListeners();
+   createPlayers();
+   turnCount++;
+   getGameState();
+   if(winCondition) {
+      createResultWindow();
+   }
+}
+
+//add event listeners here
 function createEventListeners() {
-   //add event listeners here
+   //event handler for group of buttons
+   var buttons = document.getElementsByTagName("buttons");
+   if(buttons.addEventListener) {
+      buttons.addEventListener("click", clickBox, false);
+   }
+   else if (buttons.attachEvent) {
+      buttons.attachEvent("onclick", clickBox);
+  }
 }
 
 //using this to test functions as they progress for now, will update
