@@ -11,12 +11,12 @@
 var x = {
    player: 1,
    playerName: "",
-   icon: "x.png"
+   icon: "X"
 };
 var o = {
    player: 2,
    playerName: "",
-   icon: "o.png"
+   icon: "O"
 };
 
 //main global variables
@@ -77,24 +77,20 @@ function playGame(rounds) {
 }
 
 //adds image node to selected box from HTML
-function addImage(box, player) {
+function addIcon(box, player) {
    box = String(box);
-   var image = document.createElement("img");
-   image.src = player.icon;
-   document.getElementById(box).appendChild(image);
-}
-
-//resizes all images on board for formatting issues
-function resizeImages() {
-   var images = document.getElementsByTagName("img");
-   for (var count = 0; count < images.length; count++) {
-      images[count].width = "100";
-   }
+   var icon = document.createElement("p");
+   var textbox = document.createTextNode(player.icon);
+   icon.appendChild(textbox);
+   document.getElementById(box).appendChild(icon);
 }
 
 function updateBoard() {
    //main board update function. should use several helper functions to grab info
-   playGame(5);
+   // playGame(5);
+   addImage(1, x);
+   addImage(2, o);
+   addImage(3, x);
 
    resizeImages();
 }
