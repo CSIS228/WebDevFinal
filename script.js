@@ -19,6 +19,14 @@ var o = {
    icon: "O"
 };
 
+// current board 
+var board = [" ", " ", " ",
+			 " ", " ", " ",
+			 " ", " ", " "];
+
+// array of winning positions 
+var winningCombos = 0;
+
 //main global variables
 var turnCount = 0;
 var currentPlayer = x;
@@ -57,17 +65,23 @@ function incrementPlayer() {
 
 //updates game state based on win condition/turn count
 function getGameState() {
-   gameStateMessage = "Turn " + turnCount + ": " + currentPlayer.playerName + "'s Turn";
+   gameStateMessage = currentPlayer.icon + ": " + currentPlayer.playerName + "'s Turn";
    document.getElementById("message").innerHTML = gameStateMessage;
 }
 
 //adds image node to selected box from HTML
 function addIcon(box, player) {
-   box = String(box);
-   var icon = document.createElement("p");
-   var textbox = document.createTextNode(player.icon);
-   icon.appendChild(textbox);
-   document.getElementById(box).appendChild(icon);
+	// add player icon to board array
+    board[box] = player.icon;
+	
+	// add player icon to screen
+    box = String(box);
+    var icon = document.createElement("p");
+    var textbox = document.createTextNode(player.icon);
+    icon.appendChild(textbox);
+    document.getElementById(box).appendChild(icon);
+   
+   
 }
 
 function createResultWindow(player) {
@@ -91,37 +105,147 @@ function clickBox(box_id) {
       incrementPlayer();
       getGameState();
    }
-}
-
-//main board update function. should use several helper functions to grab info
-function updateBoard() {
-   var winCondition = false;
-   createEventListeners();
-   createPlayers();
-   turnCount++;
-   getGameState();
-   if(winCondition) {
+   
+   // check for winning combos
+   if(checkForWin()) {
       createResultWindow();
    }
 }
 
+// checks for win
+function checkForWin(){
+	// TODO: implement win condition logic
+	return false;
+}
+
+// resets game
+function reset() {
+	location.reload();
+}
+
+// sets up board
+function setUpBoard() {
+   createEventListeners();
+   createPlayers();
+   
+   turnCount++;
+   getGameState();
+}
+
 //add event listeners here
 function createEventListeners() {
-   //event handler for group of buttons
-   var buttons = document.getElementsByTagName("buttons");
-   if(buttons.addEventListener) {
-      buttons.addEventListener("click", clickBox, false);
-   }
-   else if (buttons.attachEvent) {
-      buttons.attachEvent("onclick", clickBox);
-  }
+    //event handler for group of buttons
+    var buttons = new Array();
+	
+	// reset button
+	var resetButton = document.getElementById("reset");
+	if (resetButton.addEventListener) {
+	    resetButton.addEventListener("click", reset, false);
+    }
+    else if (buttons[0].attachEvent) {
+		resetButton.attachEvent("onclick", reset);
+	}
+	
+    // add button 0
+    buttons.push(document.getElementById(String(0)));
+    if (buttons[0].addEventListener) {
+	    buttons[0].addEventListener("click", function (){clickBox(0);}, false);
+    }
+    else if (buttons[0].attachEvent) {
+		buttons[0].attachEvent("onclick", function (){clickBox(0);});
+	}
+  
+    // add button 1
+    buttons.push(document.getElementById(String(1)));
+    if (buttons[1].addEventListener) {
+	    buttons[1].addEventListener("click", function (){clickBox(1);}, false); 
+    }
+    else if (buttons[1].attachEvent) {
+		buttons[1].attachEvent("onclick", function (){clickBox(1);}); 
+	}
+	
+    // add button 2
+    buttons.push(document.getElementById(String(2)));
+    if (buttons[2].addEventListener) {
+	    buttons[2].addEventListener("click", function (){clickBox(2);}, false); 
+    }
+    else if (buttons[2].attachEvent) {
+		buttons[2].attachEvent("onclick", function (){clickBox(2);});
+	}
+  
+    // add button 3
+    buttons.push(document.getElementById(String(3)));
+    if (buttons[3].addEventListener) {
+	    buttons[3].addEventListener("click", function (){clickBox(3);}, false); 
+    }
+    else if (buttons[3].attachEvent) {
+		buttons[3].attachEvent("onclick", function (){clickBox(3);}); 
+	}
+	
+    // add button 4
+    buttons.push(document.getElementById(String(4)));
+    if (buttons[4].addEventListener) {
+	    buttons[4].addEventListener("click", function (){clickBox(4);}, false);
+    }
+    else if (buttons[4].attachEvent) {
+		buttons[4].attachEvent("onclick", function (){clickBox(4);}); 
+	}
+	
+    // add button 5
+    buttons.push(document.getElementById(String(5)));
+    if (buttons[5].addEventListener) {
+	    buttons[5].addEventListener("click", function (){clickBox(5);}, false); 
+    }
+    else if (buttons[5].attachEvent) {
+		buttons[5].attachEvent("onclick", function (){clickBox(5);}); 
+	}
+	
+    // add button 6
+    buttons.push(document.getElementById(String(6)));
+    if (buttons[6].addEventListener) {
+	    buttons[6].addEventListener("click", function (){clickBox(6);}, false); 
+    }
+    else if (buttons[6].attachEvent) {
+		buttons[6].attachEvent("onclick", function (){clickBox(6);}); 
+	}
+	
+    // add button 7
+    buttons.push(document.getElementById(String(7)));
+    if (buttons[7].addEventListener) {
+	    buttons[7].addEventListener("click", function (){clickBox(7);}, false); 
+    }
+    else if (buttons[7].attachEvent) {
+		buttons[7].attachEvent("onclick", function (){clickBox(7);}); 
+	}
+	
+    // add button 8
+    buttons.push(document.getElementById(String(8)));
+    if (buttons[8].addEventListener) {
+	    buttons[8].addEventListener("click", function (){clickBox(8);}, false); 
+    }
+    else if (buttons[8].attachEvent) {
+		buttons[8].attachEvent("onclick", function (){clickBox(8);}); 
+	}
 }
 
 //using this to test functions as they progress for now, will update
 //this when project is close to complete
 if (window.addEventListener) {
-   window.addEventListener("load", updateBoard(), false);
+   window.addEventListener("load", setUpBoard(), false);
 }
 else if (window.attachEvent) {
-   window.attachEvent("onload", updateBoard());
+   window.attachEvent("onload", setUpBoard());
 }
+
+/*
+for (var i = 0; i < 9; i++){
+	   buttons.push(document.getElementById(String(i)));
+	   if (buttons[i].addEventListener) {
+		   buttons[i].addEventListener("click", clickBox, false); // clickBox(i) ---function (){ console.log(i);}
+	   }
+       else if (buttons[i].attachEvent) {
+		   buttons[i].attachEvent("onclick", clickBox); // clickBox(i)
+	   }
+   }
+
+	*/
