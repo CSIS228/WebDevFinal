@@ -1,57 +1,251 @@
-<!DOCTYPE html>
-<html>
-<head>
-   <!--
-      Final Project
-      Author: Ashley D, Alex F, and Matthew K
-      Date:   4-15-2020
-      Filename: index.htm
-   -->
-   <meta charset="utf-8" />
-   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-   <title>Web Dev Final</title>
-   <link rel="stylesheet" href="styles.css" />
-   <script src="modernizr.custom.65897.js"></script>
-   <style>
-	.grid-container {
-	display: grid;
-	grid-template-columns: auto auto auto;
-	background-color: rgba(189, 195, 199, 1);
-	padding: 10px;
-	}
-	.grid-item {
-	background-color: rgba(236, 236, 236, 1);
-	border: 1px solid rgba(108, 122, 137, 1);
-	padding: 70px;
-	font-size: 10S0px;
-	text-align: center;
-	}
-</style>
-</head>
+//   Final Project
 
-<body>
-   <header>
-      <h1>
-         Tic Tac Toe
-      </h1>
-   </header>
-  <div class="grid-container">
-  <div class="grid-item" id="1"></div>
-  <div class="grid-item" id="2"></div>
-  <div class="grid-item" id="3"></div>  
-  <div class="grid-item" id="4"></div>
-  <div class="grid-item" id="5"></div>
-  <div class="grid-item" id="6"></div>  
-  <div class="grid-item" id="7"></div>
-  <div class="grid-item" id="8"></div>
-  <div class="grid-item" id="9"></div>  
-  </div>
-  <div class="clearfix"></div>
-<footer>
-  <p id="message">hello</p>
-  <button>Reset</button>
-</footer>
-</div>
-   <script src="script.js"></script>
-</body>
-</html>
+//   Author: Ashley D, Alex F, and Matthew K
+//   Date:   4-15-2020
+
+//   Filename: script.js
+
+"use strict";
+
+//global player variables which hold player number, name, and icon
+var x = {
+   player: 1,
+   playerName: "",
+   icon: "X"
+};
+var o = {
+   player: 2,
+   playerName: "",
+   icon: "O"
+};
+
+// current board 
+var board = [" ", " ", " ",
+			 " ", " ", " ",
+			 " ", " ", " "];
+
+// array of winning positions 
+var winningCombos = 0;
+
+//main global variables
+var turnCount = 0;
+var currentPlayer = x;
+var gameStateMessage;
+
+//Prompts user in window for a name using switch statement
+function getPlayerName(mode) {
+   switch (mode) {
+      case "AI":
+         x.playerName = window.prompt("Player 1, please enter your name here: ");
+         o.playerName = "Computer";
+         break;
+      case "2P":
+         x.playerName = window.prompt("Player 1, please enter your name here: ");
+         o.playerName = window.prompt("Player 2, please enter your name here: ");
+         break;
+      default:
+         window.alert("Error");
+   }
+}
+
+//uses event handlers to create the players
+function createPlayers() {
+   //create this when method for choosing 2players or Ai is known
+   getPlayerName("2P");
+}
+
+//swaps current player
+function incrementPlayer() {
+   if (currentPlayer == x) {
+      currentPlayer = o;
+   } else {
+      currentPlayer = x;
+   }
+}
+
+//updates game state based on win condition/turn count
+function getGameState() {
+   gameStateMessage = currentPlayer.icon + ": " + currentPlayer.playerName + "'s Turn";
+   document.getElementById("message").innerHTML = gameStateMessage;
+}
+
+//adds image node to selected box from HTML
+function addIcon(box, player) {
+	// add player icon to board array
+    board[box] = player.icon;
+	
+	// add player icon to screen
+    box = String(box);
+    var icon = document.createElement("p");
+    var textbox = document.createTextNode(player.icon);
+    icon.appendChild(textbox);
+    document.getElementById(box).appendChild(icon);
+   
+   
+}
+
+function createResultWindow(player) {
+   var resultWindow = window.open("", "ResultWindow", "width=200, height=100");
+   resultWindow.document.write("<p>" + player.playerName + " Wins</p>");
+   resultWindow.document.write("<img src='victory_crown.jpg' alt='victory'>");
+}
+
+function clickBox(box_id) {
+   var box = document.getElementById(String(box_id));
+   var gameState = document.getElementById("message");
+   try {
+      if (box.innerHTML) throw "Please click another box";
+      addIcon(box_id, currentPlayer);
+   } 
+   catch (err) {
+      gameState.innerHTML = err;
+      incrementPlayer();
+   }
+   finally {
+      incrementPlayer();
+      getGameState();
+   }
+   
+   // check for winning combos
+   if(checkForWin()) {
+      createResultWindow();
+   }
+}
+
+// checks for win
+function checkForWin(){
+	// TODO: implement win condition logic
+	return false;
+}
+
+// resets game
+function reset() {
+	location.reload();
+}
+
+// sets up board
+function setUpBoard() {
+   createEventListeners();
+   createPlayers();
+   
+   turnCount++;
+   getGameState();
+}
+
+//add event listeners here
+function createEventListeners() {
+    //event handler for group of buttons
+    var buttons = new Array();
+	
+	// reset button
+	var resetButton = document.getElementById("reset");
+	if (resetButton.addEventListener) {
+	    resetButton.addEventListener("click", reset, false);
+    }
+    else if (buttons[0].attachEvent) {
+		resetButton.attachEvent("onclick", reset);
+	}
+	
+    // add button 0
+    buttons.push(document.getElementById(String(0)));
+    if (buttons[0].addEventListener) {
+	    buttons[0].addEventListener("click", function (){clickBox(0);}, false);
+    }
+    else if (buttons[0].attachEvent) {
+		buttons[0].attachEvent("onclick", function (){clickBox(0);});
+	}
+  
+    // add button 1
+    buttons.push(document.getElementById(String(1)));
+    if (buttons[1].addEventListener) {
+	    buttons[1].addEventListener("click", function (){clickBox(1);}, false); 
+    }
+    else if (buttons[1].attachEvent) {
+		buttons[1].attachEvent("onclick", function (){clickBox(1);}); 
+	}
+	
+    // add button 2
+    buttons.push(document.getElementById(String(2)));
+    if (buttons[2].addEventListener) {
+	    buttons[2].addEventListener("click", function (){clickBox(2);}, false); 
+    }
+    else if (buttons[2].attachEvent) {
+		buttons[2].attachEvent("onclick", function (){clickBox(2);});
+	}
+  
+    // add button 3
+    buttons.push(document.getElementById(String(3)));
+    if (buttons[3].addEventListener) {
+	    buttons[3].addEventListener("click", function (){clickBox(3);}, false); 
+    }
+    else if (buttons[3].attachEvent) {
+		buttons[3].attachEvent("onclick", function (){clickBox(3);}); 
+	}
+	
+    // add button 4
+    buttons.push(document.getElementById(String(4)));
+    if (buttons[4].addEventListener) {
+	    buttons[4].addEventListener("click", function (){clickBox(4);}, false);
+    }
+    else if (buttons[4].attachEvent) {
+		buttons[4].attachEvent("onclick", function (){clickBox(4);}); 
+	}
+	
+    // add button 5
+    buttons.push(document.getElementById(String(5)));
+    if (buttons[5].addEventListener) {
+	    buttons[5].addEventListener("click", function (){clickBox(5);}, false); 
+    }
+    else if (buttons[5].attachEvent) {
+		buttons[5].attachEvent("onclick", function (){clickBox(5);}); 
+	}
+	
+    // add button 6
+    buttons.push(document.getElementById(String(6)));
+    if (buttons[6].addEventListener) {
+	    buttons[6].addEventListener("click", function (){clickBox(6);}, false); 
+    }
+    else if (buttons[6].attachEvent) {
+		buttons[6].attachEvent("onclick", function (){clickBox(6);}); 
+	}
+	
+    // add button 7
+    buttons.push(document.getElementById(String(7)));
+    if (buttons[7].addEventListener) {
+	    buttons[7].addEventListener("click", function (){clickBox(7);}, false); 
+    }
+    else if (buttons[7].attachEvent) {
+		buttons[7].attachEvent("onclick", function (){clickBox(7);}); 
+	}
+	
+    // add button 8
+    buttons.push(document.getElementById(String(8)));
+    if (buttons[8].addEventListener) {
+	    buttons[8].addEventListener("click", function (){clickBox(8);}, false); 
+    }
+    else if (buttons[8].attachEvent) {
+		buttons[8].attachEvent("onclick", function (){clickBox(8);}); 
+	}
+}
+
+//using this to test functions as they progress for now, will update
+//this when project is close to complete
+if (window.addEventListener) {
+   window.addEventListener("load", setUpBoard(), false);
+}
+else if (window.attachEvent) {
+   window.attachEvent("onload", setUpBoard());
+}
+
+/*
+for (var i = 0; i < 9; i++){
+	   buttons.push(document.getElementById(String(i)));
+	   if (buttons[i].addEventListener) {
+		   buttons[i].addEventListener("click", clickBox, false); // clickBox(i) ---function (){ console.log(i);}
+	   }
+       else if (buttons[i].attachEvent) {
+		   buttons[i].attachEvent("onclick", clickBox); // clickBox(i)
+	   }
+   }
+
+	*/
