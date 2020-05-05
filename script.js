@@ -19,13 +19,24 @@ var o = {
    icon: "O"
 };
 
-// current board 
-var board = [" ", " ", " ",
-			 " ", " ", " ",
-			 " ", " ", " "];
+// current board state
+var board = [
+	" ", " ", " ",
+	" ", " ", " ",
+	" ", " ", " "
+];
 
 // array of winning positions 
-var winningCombos = 0;
+var winningCombos = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6]
+];
 
 //main global variables
 var turnCount = 0;
@@ -65,7 +76,7 @@ function incrementPlayer() {
 
 //updates game state based on win condition/turn count
 function getGameState() {
-   gameStateMessage = currentPlayer.icon + ": " + currentPlayer.playerName + "'s Turn";
+   gameStateMessage = currentPlayer.playerName + "'s Turn";
    document.getElementById("message").innerHTML = gameStateMessage;
 }
 
@@ -85,12 +96,14 @@ function addIcon(box, player) {
 }
 
 function createResultWindow(player) {
-   var resultWindow = window.open("", "ResultWindow", "width=200, height=100");
-   resultWindow.document.write("<p>" + player.playerName + " Wins</p>");
+   var resultWindow = window.open("", "ResultWindow", "width=350, height=350");
+   resultWindow.document.write("<p>" + currentPlayer.playerName + " Wins!!!</p>");
    resultWindow.document.write("<img src='victory_crown.jpg' alt='victory'>");
 }
 
 function clickBox(box_id) {
+	// TODO: if mode is against computer, don't allow clickBox() to be ran out of turn
+	
    var box = document.getElementById(String(box_id));
    var gameState = document.getElementById("message");
    try {
@@ -102,19 +115,36 @@ function clickBox(box_id) {
       incrementPlayer();
    }
    finally {
-      incrementPlayer();
-      getGameState();
-   }
-   
-   // check for winning combos
-   if(checkForWin()) {
-      createResultWindow();
+	// check for winning combos
+	 if(checkForWin()) {
+	     createResultWindow();
+	     //reset();
+	 }
+       incrementPlayer();
+       getGameState();
    }
 }
 
 // checks for win
 function checkForWin(){
-	// TODO: implement win condition logic
+	for (var i = 0; i < 8; i++){
+		// use temporary variables for easier reading
+		var a = board[winningCombos[i][0]];
+		var b = board[winningCombos[i][1]];
+		var c = board[winningCombos[i][2]];
+		
+		// make sure spaces are not empty
+		if (a === " " || b === " " || c === " ")
+		{
+			continue;
+		}
+		
+		// compare board status to winning combos
+		if (a === b && a === c){
+			return true;
+		}
+	}
+	// return false if no win is detected
 	return false;
 }
 
@@ -236,16 +266,3 @@ if (window.addEventListener) {
 else if (window.attachEvent) {
    window.attachEvent("onload", setUpBoard());
 }
-
-/*
-for (var i = 0; i < 9; i++){
-	   buttons.push(document.getElementById(String(i)));
-	   if (buttons[i].addEventListener) {
-		   buttons[i].addEventListener("click", clickBox, false); // clickBox(i) ---function (){ console.log(i);}
-	   }
-       else if (buttons[i].attachEvent) {
-		   buttons[i].attachEvent("onclick", clickBox); // clickBox(i)
-	   }
-   }
-
-	*/
